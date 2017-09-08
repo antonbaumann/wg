@@ -1,3 +1,7 @@
+# Global variables
+erreichbare_punkte = dict()
+punkte_gerade = dict()
+gerade_punkte = dict()
 
 def findSecond(l, b):   # Findet zweithöchstes/niedrigstes Element in Liste: True-> höchstes; False -> niedrigstes
     tmp = []
@@ -33,11 +37,5 @@ def calculateIntersection(a, b):
 
     return None
 
-def main():
-    a = ( (0,2), (2,0))
-    b = ( (2,0), (2,1))
-    S = calculateIntersection(a, b)
-    print(S)
-
 if __name__ == '__main__':
-    main()
+    geraden = read_File()
