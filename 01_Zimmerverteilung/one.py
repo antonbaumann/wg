@@ -136,7 +136,7 @@ def test(zimmeraufteilung, personen):   # überprüft ob alle wünsche erfüllt 
                 print(con + " in")
                 print(zimmer)
                 return False
-    print("Alles gut!!")
+    print("Alles gut!")
     return True
 
 
