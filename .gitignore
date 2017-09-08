@@ -38,8 +38,4 @@ Thumbs.db
 
 # Pycharm generated files #
 ###########################
-.idea/misc.xml
-.idea/modules.xml
-.idea/preferred-vcs.xml
-.idea/wg.iml
-.idea/workspace.xml
+.idea/*
