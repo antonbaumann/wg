@@ -2,16 +2,17 @@ import numpy as np
 import sys
 from queue import *
 
-def readFile(s):
+
+def read_file(s):
     f = open(s, 'r')
     p = f.readlines()
     personen = []
     for i in range(0, len(p), 4):
         name = p[i].replace("\n", "")
-        pro =  p[i+1].replace("\n", "").replace("+", "").split(" ")
-        con =  p[i+2].replace("\n", "").replace("-", "").split(" ")
+        pro = p[i + 1].replace("\n", "").replace("+", "").split(" ")
+        con = p[i + 2].replace("\n", "").replace("-", "").split(" ")
 
-        while '' in pro:    # ineffizient -> O(n^2) Aber: Listen sehr kurz: max 2 durchläufe -> O(n)
+        while '' in pro:  # ineffizient -> O(n^2) Aber: Listen sehr kurz: max 2 durchläufe -> O(n)
             pro.remove('')
         while '' in con:
             con.remove('')
@@ -20,8 +21,9 @@ def readFile(s):
         personen.append(person)
     return sorted(personen)
 
-def createMatrix(l, names):
-    matrix = np.array([ [0] * len(l) for _ in range(len(l))])
+
+def create_matrix(l, names):
+    matrix = np.array([[0] * len(l) for _ in range(len(l))])
 
     for i in range(len(l)):
         pro = l[i][1]
@@ -36,7 +38,8 @@ def createMatrix(l, names):
 
     return matrix
 
-def operateOnMatrix(matrix):
+
+def operate_on_matrix(matrix):
     size = len(matrix)
     for y in range(size):
         for x in range(size):
@@ -48,54 +51,58 @@ def operateOnMatrix(matrix):
             if matrix[y][x] == -1:
                 matrix[x][y] = -1
 
-def allVisited(l):
+
+def all_visited(l):
     for i in l:
         if not i:
             return False
     return True
 
-def getFirstNotVisited(l):
+
+def get_first_non_visited(l):
     for i in range(len(l)):
         if not l[i]:
             return i
 
 
-def BFS(matrix):
-    adjListe = []
-    adjListeCon = []
-    roomList = []
+def bfs(matrix):
+    adj_liste = []
+    adj_liste_con = []
+    room_list = []
     for y in range(len(matrix)):
-        tmp = []
+        pro = []
         con = []
         for x in range(len(matrix)):
             if matrix[y][x] == 1:
-                tmp.append(x)
+                pro.append(x)
             if matrix[y][x] == -1:
                 con.append(x)
-        adjListe.append(tmp)
-        adjListeCon.append(con)
+        adj_liste.append(pro)
+        adj_liste_con.append(con)
 
     visited = []
     for i in range(len(matrix)):
         visited.append(False)
 
-    while not allVisited(visited):
+    while not all_visited(visited):
         room = []
         q = Queue(maxsize=len(matrix))
-        firstNotVisited = getFirstNotVisited(visited)
-        q.put(firstNotVisited)
-        visited[firstNotVisited] = True
-        room.append(firstNotVisited)
+        first_non_visited = get_first_non_visited(visited)
+        q.put(first_non_visited)
+        visited[first_non_visited] = True
+        room.append(first_non_visited)
 
         while not q.empty():
             node = q.get()
 
-            for child in adjListe[node]:
+            for child in adj_liste[node]:
                 if not visited[child]:
-                    print(room)
-                    print(str(child) + " " + str(adjListeCon[child]))
-                    print()
-                    if len(set(room).intersection(adjListeCon[child])) > 0:
+                    # print(room)
+                    # print(str(child) + " " + str(adj_liste_con[child]))
+                    # print()
+                    if len(set(room).intersection(adj_liste_con[child])) > 0:
+                        # braucht keinen check ob schülerinnen im zimmer mit neuer schuelerin zusammen sein wollen,
+                        # weil matrix gespiegelt
                         print("Zimmerverteilung nicht möglich!")
                         sys.exit()
 
@@ -103,30 +110,32 @@ def BFS(matrix):
                     visited[child] = True
                     room.append(child)
 
-        roomList.append(sorted(set(room)))
+        room_list.append(sorted(set(room)))
 
-    return roomList
+    return room_list
 
 
 if __name__ == '__main__':
-    personen = readFile("txt/zimmerbelegung2.txt")
+    personen = read_file("txt/zimmerbelegung2.txt")
     schuelerListe = []
     for p in personen:
         schuelerListe.append(p[0])
 
-    adjazenzmatrix = createMatrix(personen, schuelerListe)
-    operateOnMatrix(adjazenzmatrix)
-    roomList = BFS(adjazenzmatrix)
+    matrix = create_matrix(personen, schuelerListe)
+    operate_on_matrix(matrix)
+    room_list = bfs(matrix)
 
-    print(adjazenzmatrix)
+    print()
+    print(matrix)
+    print()
 
-    roomListNamen = []
-    for l in roomList:
+    room_listNamen = []
+    for l in room_list:
         tmp = []
         for i in l:
             tmp.append(schuelerListe[i])
-        roomListNamen.append(tmp)
+        room_listNamen.append(tmp)
 
     print("Zimmeraufteilung möglich!")
-    for l in roomListNamen:
+    for l in room_listNamen:
         print(l)
