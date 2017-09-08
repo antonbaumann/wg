@@ -115,8 +115,36 @@ def bfs(matrix):
     return room_list
 
 
+def find_room(person, zimmeraufteilung):
+    for zimmer in zimmeraufteilung:
+        if person[0] in zimmer:
+            return zimmer
+
+
+def test(zimmeraufteilung, personen):   # überprüft ob alle wünsche erfüllt wurden
+    for p in personen:
+        zimmer = find_room(p, zimmeraufteilung)
+        for pro in p[1]:
+            if pro not in zimmer:
+                print(p)
+                print(pro + " not in")
+                print(zimmer)
+                return False
+        for con in p[2]:
+            if con in zimmer:
+                print(p)
+                print(con + " in")
+                print(zimmer)
+                return False
+    print("Alles gut!!")
+    return True
+
+
 if __name__ == '__main__':
-    personen = read_file("txt/zimmerbelegung2.txt")
+    personen = read_file("txt/zimmerbelegung5.txt")
+
+    print(personen)
+
     schuelerListe = []
     for p in personen:
         schuelerListe.append(p[0])
@@ -129,13 +157,16 @@ if __name__ == '__main__':
     print(matrix)
     print()
 
-    room_listNamen = []
+    room_list_namen = []
     for l in room_list:
         tmp = []
         for i in l:
             tmp.append(schuelerListe[i])
-        room_listNamen.append(tmp)
+        room_list_namen.append(tmp)
 
     print("Zimmeraufteilung möglich!")
-    for l in room_listNamen:
+    for l in room_list_namen:
         print(l)
+
+    print()
+    test(room_list_namen, personen)
