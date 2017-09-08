@@ -1,7 +1,7 @@
 # Bundeswettbewerb Informatik 2017
 
-01 ->	Fast fertig! @ruben lies noch mal ueber den code
-	In "zimmerbelegung5.txt" hat Marie sich auf der CON-Liste selbst stehen
+01 ->	Fast fertig! @ruben lies noch mal ueber den code \n
+	In "zimmerbelegung5.txt" hat Marie sich auf der CON-Liste selbst stehen\n
 	Fehler von BWInf?
 
 02 -> 	Auf gehts @ruben :P
