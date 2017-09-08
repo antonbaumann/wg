@@ -107,8 +107,9 @@ def BFS(matrix):
 
     return roomList
 
-def main():
-    personen = readFile("zimmerbelegung/zimmerbelegung10")
+
+if __name__ == '__main__':
+    personen = readFile("txt/zimmerbelegung2.txt")
     schuelerListe = []
     for p in personen:
         schuelerListe.append(p[0])
@@ -129,5 +130,3 @@ def main():
     print("Zimmeraufteilung möglich!")
     for l in roomListNamen:
         print(l)
-
-main()
