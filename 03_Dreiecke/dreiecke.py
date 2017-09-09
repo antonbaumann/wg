@@ -151,7 +151,7 @@ def modified_dfs(punkt_geraden, gerade_punkte):
 
 
 if __name__ == '__main__':
-    punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke2.txt")
+    punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke6.txt")
     evaluate(punkt_geraden, gerade_punkte, punkte)
     dreiecke = modified_dfs(punkt_geraden, gerade_punkte)
 

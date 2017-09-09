@@ -1,23 +1,22 @@
 # Bundeswettbewerb Informatik 2017
 
-## 01	
-Fast fertig! @ruben lies noch mal ueber den code
+## 01 (fertig)	
+Fertig!
 
-In "zimmerbelegung5.txt" hat Marie sich auf der CON-Liste selbst stehen
-	
-Fehler von BWInf?
+(In "zimmerbelegung5.txt" hat Marie sich auf der CON-Liste selbst stehen
+Fehler von BWInf?)
 
 
 ## 02
 Auf gehts @ruben :P
 
 
-## 03
-Fast fertig! Nur noch DFS implementieren
+## 03 (fertig)
+Fertig!
 
 
 ## 04
-later...
+in bearbeitung
 
 
 ## 05
