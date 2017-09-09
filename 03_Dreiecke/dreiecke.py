@@ -117,17 +117,45 @@ def evaluate(punkt_geraden, gerade_punkte, punkte):
 
 
 def modified_dfs(punkt_geraden, gerade_punkte):
-    erreichbar = dict()
+    dreiecke = set()
     for punkt,geraden in punkt_geraden.items():
+        dreieck = [None, None, None]
         # print(str(punkt) + " -> " + str(geraden))
-        erreichbar[punkt] = set()
-        for g in geraden:
-            erreichbar[punkt].update(gerade_punkte[g])
-        erreichbar[punkt].remove(punkt)
-    
-    print(erreichbar)
+        for g1 in geraden:
+            erreichbar = set(gerade_punkte[g1])
+            erreichbar.remove(punkt)
+
+            dreieck[0] = punkt
+
+            for p2 in erreichbar:
+                dreieck[1] = p2
+                g2 = punkt_geraden[p2] - set([g1])
+                if g2 == set():
+                    continue
+                g2 = g2.pop()
+                tmp = set(gerade_punkte[g2]) - set([p2])
+                e2 = tmp
+
+                for p3 in e2:
+                    dreieck[2] = p3
+                    e3 = set()
+                    for g3 in punkt_geraden[p3]:
+                        e3.update(gerade_punkte[g3])
+                    if punkt in e3:
+                        dreiecke.add(tuple(sorted(dreieck)))
+    return dreiecke
+
+
+
+
+
 
 if __name__ == '__main__':
     punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke1.txt")
     evaluate(punkt_geraden, gerade_punkte, punkte)
     dreiecke = modified_dfs(punkt_geraden, gerade_punkte)
+    for d in dreiecke:
+        print(d)
+
+    print()
+    print(len(dreiecke))

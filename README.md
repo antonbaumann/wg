@@ -13,7 +13,7 @@ Auf gehts @ruben :P
 
 
 ## 03
-Funktion, die Schnittpunkte von Strecken berechnet implementiert.
+Fast fertig! Nur noch DFS implementieren
 
 
 ## 04
@@ -21,4 +21,4 @@ later...
 
 
 ## 05
-Waere was fuer Max
+Wäre was für Max
