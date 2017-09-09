@@ -62,7 +62,7 @@ def read_File(filename):
     p = f.readlines()
     n = int(p.pop(0).replace('\n', ''))
 
-    erreichbare_punkte, punkt_geraden, gerade_punkte = {}, {}, {}
+    punkt_geraden, gerade_punkte = {}, {}
     punkte = set()
 
     for i in range(n):
@@ -75,8 +75,8 @@ def read_File(filename):
         punkte.add(points[0])
         punkte.add(points[1])
 
-        erreichbare_punkte.setdefault(points[0], set()).add(points[1])
-        erreichbare_punkte.setdefault(points[1], set()).add(points[0])
+        # erreichbare_punkte.setdefault(points[0], set()).add(points[1])
+        # erreichbare_punkte.setdefault(points[1], set()).add(points[0])
 
         for poi in points:
             if poi not in punkt_geraden:
@@ -86,17 +86,17 @@ def read_File(filename):
 
         gerade_punkte[i] = points
 
-    return erreichbare_punkte, punkt_geraden, gerade_punkte, punkte
+    return punkt_geraden, gerade_punkte, punkte
 
 
-# returns erreichbare_punkte, punkt_geraden, gerade_punkte
-def evaluate(erreichbare_punkte, punkt_geraden, gerade_punkte, punkte):
+# returns punkt_geraden, gerade_punkte, punkte
+def evaluate(punkt_geraden, gerade_punkte, punkte):
     for g1 in gerade_punkte:
         for g2 in gerade_punkte:
             if g1 is g2:
                 continue
             schnittpunkt = calculate_intersection(gerade_punkte[g1], gerade_punkte[g2])
-            if schnittpunkt == None:
+            if schnittpunkt is None:
                 continue
 
             if schnittpunkt in punkte:
@@ -104,9 +104,31 @@ def evaluate(erreichbare_punkte, punkt_geraden, gerade_punkte, punkte):
                     gerade_punkte[g1].append(schnittpunkt)
                 elif schnittpunkt not in gerade_punkte[g2]:
                     gerade_punkte[g2].append(schnittpunkt)
+                punkt_geraden[schnittpunkt].add(g1)
+                punkt_geraden[schnittpunkt].add(g2)
+
+            else:
+                gerade_punkte[g1].append(schnittpunkt)
+                gerade_punkte[g2].append(schnittpunkt)
+                punkt_geraden.setdefault(schnittpunkt, set()).add(g1)
+                punkt_geraden.setdefault(schnittpunkt, set()).add(g2)
+
+            punkte.add(schnittpunkt)
 
 
+def modified_dfs(punkt_geraden, gerade_punkte):
+    erreichbar = dict()
+    for punkt,geraden in punkt_geraden.items():
+        # print(str(punkt) + " -> " + str(geraden))
+        erreichbar[punkt] = set()
+        for g in geraden:
+            erreichbar[punkt].update(gerade_punkte[g])
+        erreichbar[punkt].remove(punkt)
+    
+
+    print(erreichbar)
 
 if __name__ == '__main__':
-    erreichbare_punkte, punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke1.txt")
-    evaluate(erreichbare_punkte, punkt_geraden, gerade_punkte, punkte)
+    punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke1.txt")
+    evaluate(punkt_geraden, gerade_punkte, punkte)
+    dreiecke = modified_dfs(punkt_geraden, gerade_punkte)
