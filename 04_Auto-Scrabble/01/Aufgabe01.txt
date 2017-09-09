@@ -1,0 +1,17 @@
+1. Aufgabe
+
+Kennzeichen = Kürzel + [A-Z]{1,2} + (Zahl)  # Zahl wird ignoriert
+
+# Also:
+Kennzeichen = Kürzel + [A-Z]{1,2}
+
+# 1. Möglichkeit
+"TIMO" = Kürzel + "MO"
+-> Kürzel = "TI"
+
+# 2. Möglichkeit
+"TIMO" = Kürzel + "O"
+-> Kürzel = "TIM"
+
+Kürzelliste enthält weder "TIM" noch "TI"
+-> Daher kann "TIMO" nicht auf einem Kennzeichen stehen
