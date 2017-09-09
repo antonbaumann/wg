@@ -1,20 +1,11 @@
 # by Anton Baumann
 
 # imports
-import math
-
+import matplotlib.pyplot as plt
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 digits = "0123456789"
 
-
-def index_to_name(n, b):
-    le = n // len(alphabet)
-    ret = alphabet[0]*le + alphabet[n%len(alphabet)]
-    if b:
-        return ret
-    else:
-        return ret.lower()
 
 # Findet zweithöchstes/niedrigstes Element in Liste:
 # True-> höchstes; False -> niedrigstes
@@ -154,7 +145,6 @@ if __name__ == '__main__':
     punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke6.txt")
     evaluate(punkt_geraden, gerade_punkte, punkte)
     dreiecke = modified_dfs(punkt_geraden, gerade_punkte)
-
 
     for d in dreiecke:
         print(d)
