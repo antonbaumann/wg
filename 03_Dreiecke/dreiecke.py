@@ -125,7 +125,6 @@ def modified_dfs(punkt_geraden, gerade_punkte):
             erreichbar[punkt].update(gerade_punkte[g])
         erreichbar[punkt].remove(punkt)
     
-
     print(erreichbar)
 
 if __name__ == '__main__':
