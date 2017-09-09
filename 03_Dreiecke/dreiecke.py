@@ -45,6 +45,10 @@ def calculate_intersection(a, b):
     s_x = ((x[3] - x[2]) * (x[1] * y[0] - x[0] * y[1]) - (x[1] - x[0]) * (x[3] * y[2] - x[2] * y[3])) / denominator
     s_y = ((y[0] - y[1]) * (x[3] * y[2] - x[2] * y[3]) - (y[2] - y[3]) * (x[1] * y[0] - x[0] * y[1])) / denominator
 
+    if s_x == -0.0:
+        s_x = 0.0
+    if s_y == -0.0:
+        s_y = 0.0
     S = (s_x, s_y)
 
     if (lower_lim_x <= s_x <= upper_lim_x) and (lower_lim_y <= s_y <= upper_lim_y):
@@ -58,15 +62,19 @@ def read_File(filename):
     p = f.readlines()
     n = int(p.pop(0).replace('\n', ''))
 
-    erreichbare_punkte, punkt_geraden, gerade_punkte, geraden = {}, {}, {}, {}
+    erreichbare_punkte, punkt_geraden, gerade_punkte = {}, {}, {}
+    punkte = set()
 
     for i in range(n):
         tmp = p[i].replace('\n', '')
         tmp = tmp.split()
+        tmp = [float(x) for x in tmp]
+
         points = [(tmp[0], tmp[1]), (tmp[2], tmp[3])]
-        geraden.setdefault(i, set())
-        geraden[i].add(points[0])
-        geraden[i].add(points[1])
+
+        punkte.add(points[0])
+        punkte.add(points[1])
+
         erreichbare_punkte.setdefault(points[0], set()).add(points[1])
         erreichbare_punkte.setdefault(points[1], set()).add(points[0])
 
@@ -76,14 +84,29 @@ def read_File(filename):
             else:
                 punkt_geraden.get(poi).add(i)
 
-        gerade_punkte[i] = set(points)
+        gerade_punkte[i] = points
 
-    return erreichbare_punkte, punkt_geraden, gerade_punkte, geraden
+    return erreichbare_punkte, punkt_geraden, gerade_punkte, punkte
+
+
+# returns erreichbare_punkte, punkt_geraden, gerade_punkte
+def evaluate(erreichbare_punkte, punkt_geraden, gerade_punkte, punkte):
+    for g1 in gerade_punkte:
+        for g2 in gerade_punkte:
+            if g1 is g2:
+                continue
+            schnittpunkt = calculate_intersection(gerade_punkte[g1], gerade_punkte[g2])
+            if schnittpunkt == None:
+                continue
+
+            if schnittpunkt in punkte:
+                if schnittpunkt not in gerade_punkte[g1]:
+                    gerade_punkte[g1].append(schnittpunkt)
+                elif schnittpunkt not in gerade_punkte[g2]:
+                    gerade_punkte[g2].append(schnittpunkt)
+
+
 
 if __name__ == '__main__':
-    erreichbare_punkte, punkt_geraden, gerade_punkte, geraden = read_File("txt/dreiecke1.txt")
-
-    print(erreichbare_punkte)
-    print(punkt_geraden)
-    print(gerade_punkte)
-    print(geraden)
+    erreichbare_punkte, punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke1.txt")
+    evaluate(erreichbare_punkte, punkt_geraden, gerade_punkte, punkte)
