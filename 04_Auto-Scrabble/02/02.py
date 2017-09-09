@@ -13,7 +13,7 @@ def find_words(wordlist, kuerzel):
     k_list = open_file(kuerzel)
     for word in w_list:
         tmp = ""
-        for i in range(0, min(3, len(word))):
+        for i in range(0, min(3, len(word)-1)):
             tmp += word[i]
             if len(word) == 4 and i == 0:
                 continue
