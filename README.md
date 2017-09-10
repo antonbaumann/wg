@@ -16,7 +16,7 @@ Fertig!
 
 
 ## 04
-in bearbeitung
+Fast fertig. Sehr ineffizient.
 
 
 ## 05
