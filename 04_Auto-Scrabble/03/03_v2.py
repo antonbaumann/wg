@@ -1,3 +1,4 @@
+import time
 
 def open_file(name):
     file = open(name, 'r')
@@ -8,6 +9,20 @@ def open_file(name):
     w_list = sorted(w_list)
     file.close()
     return w_list
+
+
+def binary_search(lst, target):
+    min = 0
+    max = len(lst) - 1
+    avg = (min + max) // 2
+    while min < max:
+        if lst[avg] == target:
+            return True
+        elif lst[avg] < target:
+            return avg + 1 + binary_search(lst[avg + 1:], target)
+        else:
+            return binary_search(lst[:avg], target)
+    return False
 
 
 def is_possible(s):
@@ -24,44 +39,43 @@ def is_possible(s):
 
         # Ueberprueft ob pre in kuerzelliste ist
         # Ueberprueft ob Umlaute in post
-        if pre in KUERZEL and not any((c in umlaute) for c in post):
+        if binary_search(KUERZEL, pre) and not any((c in umlaute) for c in post):
             return True
 
     return False
 
 
 def check(word):
-    stack = [[0, 3]]
-    i, n = 0, 3
-    while True:
-        i, n = stack[len(stack)-1]
-        if i >= len(word):
-            break
-        tmp = word[i:i+n]
+    START, STOP, STEP = 5, 2, -1
+    stack = [[0, START]]
+    i, n = 0, STOP
+    while i < len(word):
+        # print(stack)
+        i, n = stack[len(stack) - 1]
+        tmp = word[i:i + n]
         if is_possible(tmp):
-            stack.append([i+n, 3])
+            stack.append([i + n, START])
         else:
-            if n < 5:
+            if STEP < 0 and n > STOP or STEP > 0 and n < STOP:
                 i, n = stack.pop()
-                n += 1
+                n += STEP
                 stack.append([i, n])
             else:
-                #
                 stack.pop()
                 if len(stack) == 0:
                     print("Nicht darstellbar!")
                     return False
                 i, n = stack.pop()
-                n += 1
+                n += STEP
                 stack.append([i, n])
 
-    stack.pop()     # letzter vorberechneter eintrag wird gelöscht
+    stack.pop()  # letzter vorberechneter eintrag wird gelöscht
 
     print("Darstellbar!")
 
     comb = []
     for i, n in stack:
-        comb.append(word[i: i+n])
+        comb.append(word[i: i + n])
 
     print(comb)
     return True
@@ -72,7 +86,12 @@ if __name__ == '__main__':
     KUERZEL = open_file("../txt/kuerzelliste.txt")
     AUTOSCRABBLE = open_file("../txt/autoscrabble.txt")
 
+    start = time.time()
     for word in AUTOSCRABBLE:
         print(word)
         check(word)
         print()
+
+    end = time.time()
+
+    print(end - start)

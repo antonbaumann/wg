@@ -32,6 +32,3 @@ def is_possible(s):
 if __name__ == '__main__':
     global KUERZEL
     KUERZEL = open_file("../txt/kuerzelliste.txt")
-    while True:
-        s = input("word: ")
-        print(is_possible(s))
