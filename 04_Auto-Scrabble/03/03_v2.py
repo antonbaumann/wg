@@ -19,7 +19,7 @@ def binary_search(lst, target):
         if lst[avg] == target:
             return True
         elif lst[avg] < target:
-            return avg + 1 + binary_search(lst[avg + 1:], target)
+            return binary_search(lst[avg + 1:], target)
         else:
             return binary_search(lst[:avg], target)
     return False
@@ -39,7 +39,9 @@ def is_possible(s):
 
         # Ueberprueft ob pre in kuerzelliste ist
         # Ueberprueft ob Umlaute in post
+
         if binary_search(KUERZEL, pre) and not any((c in umlaute) for c in post):
+        # if pre in KUERZEL and not any((c in umlaute) for c in post):
             return True
 
     return False

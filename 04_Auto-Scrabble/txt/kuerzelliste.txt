@@ -598,7 +598,6 @@ TIR
 TO
 TÖL
 TP
-TR
 TS
 TÜ
 TUT

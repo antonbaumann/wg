@@ -48,7 +48,6 @@ def calculate_intersection(a, b):
         if lower_y_a <= s_y <= upper_y_a and lower_y_b <= s_y <= upper_y_b:
             # plt.plot(S[0], S[1], marker='x', color='r')
             return S
-
     return None
 
 
@@ -69,9 +68,6 @@ def read_File(filename):
 
         punkte.add(points[0])
         punkte.add(points[1])
-
-        # erreichbare_punkte.setdefault(points[0], set()).add(points[1])
-        # erreichbare_punkte.setdefault(points[1], set()).add(points[0])
 
         for poi in points:
             if poi not in punkt_geraden:
@@ -143,11 +139,16 @@ def modified_dfs(punkt_geraden, gerade_punkte):
 
 if __name__ == '__main__':
     punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke1.txt")
-
     evaluate(punkt_geraden, gerade_punkte, punkte)
-
     dreiecke = modified_dfs(punkt_geraden, gerade_punkte)
+
     i = 1
+    for p in punkte:
+        plt.plot(p[0], p[1], marker='o', color='grey')
+    for k, v in gerade_punkte.items():
+        plt.plot([v[0][0], v[1][0]], [v[0][1], v[1][1]], color='black')
+    plt.show()
+
     for d in dreiecke:
         print(str(i) + " -> " + str(d))
         i += 1

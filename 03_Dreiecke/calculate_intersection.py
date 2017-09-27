@@ -26,8 +26,6 @@ def calculate_intersection(a, b):
     upper_y_b = max(b[0][1], b[1][1])
     lower_y_b = min(b[0][1], b[1][1])
 
-
-
     s_x = ((x[3] - x[2]) * (x[1] * y[0] - x[0] * y[1]) - (x[1] - x[0]) * (x[3] * y[2] - x[2] * y[3])) / denominator
     s_y = ((y[0] - y[1]) * (x[3] * y[2] - x[2] * y[3]) - (y[2] - y[3]) * (x[1] * y[0] - x[0] * y[1])) / denominator
 
@@ -41,7 +39,6 @@ def calculate_intersection(a, b):
         if lower_y_a <= s_y <= upper_y_a and lower_y_b <= s_y <= upper_y_b:
             plt.plot(S[0], S[1], marker='x', color='r')
             return S
-
     return None
 
 

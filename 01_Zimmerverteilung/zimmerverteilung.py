@@ -141,7 +141,7 @@ def test(zimmeraufteilung, personen):   # überprüft ob alle wünsche erfüllt 
 
 
 if __name__ == '__main__':
-    personen = read_file("txt/zimmerbelegung5.txt")
+    personen = read_file("txt/zimmerbelegung6.txt")
 
     print(personen)
 
