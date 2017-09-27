@@ -8,7 +8,7 @@ Fehler von BWInf?)
 
 
 ## 02
-Auf gehts @ruben :P
+...................
 
 
 ## 03 (fertig)
@@ -16,8 +16,8 @@ Fertig!
 
 
 ## 04
-Fast fertig. Sehr ineffizient.
+Fertig!
 
 
 ## 05
-Wäre was für Max
+Fertig für Tiefe 1
