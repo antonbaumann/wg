@@ -14,6 +14,13 @@ def r(t):
 class Spielfeld:
     feld = np.matrix([[0] * 8] * 8)
     bauern = []
+
+    # 0: Nicht Besetzt
+    # 1: Bauer
+    # 2: Turm
+    # 3: Zugmöglichkeit Bauer
+    # 4: Zugmöglichkeit Turm
+    # 5: Turm Bedroht
     turm = []
 
     # Visualisiert spielfeld
@@ -55,11 +62,15 @@ class Spielfeld:
             for y in range(8):
                 if self.feld[y, x] in (3, 4):
                     self.feld[y, x] = 0
+                if self.feld[y, x] == 5:
+                    self.feld[y, x] = 2
 
         for b in self.bauern:
             for m in self.possible_moves(b, 1):
                 if self.feld[r(m)] == 0:
                     self.feld[r(m)] = 3
+                if self.feld[r(m)] == 2:
+                    self.feld[r(m)] = 5
 
         tmp = set()
         for t in self.turm:
@@ -162,7 +173,8 @@ class Spielfeld:
             direction = ((-1, -1), (8, 1))
 
             # Feld selbst "Zug der Länge 0"
-            moves.add(XY)
+            if self.feld[r(XY)] not in (3, 5):
+                moves.add(XY)
             # Vertically
             for e, s in direction:
                 for i in range(XY[1], e, s):
@@ -177,7 +189,8 @@ class Spielfeld:
                         break
                     if self.feld[XY[1], i] in (0, 4):
                         moves.add((i, XY[1]))
-
+            print(len(moves))
+            print(sorted(moves))
             return sorted(moves)
 
 
