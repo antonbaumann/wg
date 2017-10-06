@@ -1,12 +1,11 @@
 def calculate_price(we, fe, g, k, j, e):
     preise = {
-              "e": 3.5,
-              "j": 2.5,
-              "t":   11.0,
-              "f": 8.0
+              "e":  3.5,    # Erwachsener   (Einzelkarte)
+              "j":  2.5,    # Jugendlischer (Einzelkarte)
+              "t": 11.0,    # Tageskarte
+              "f":  8.0     # Familienkarte
               }
 
-    rabatt_einzelpreis = 0
     # Wenn Ferien -> Gutscheine ungültig
     if fe:
         g = 0
@@ -40,24 +39,20 @@ def calculate_price(we, fe, g, k, j, e):
         nr_t = (e + j) // 6
         nr = nr_t * 6
 
-        while nr >0:
-            if t_p[0]>0: t_p[0] -= 1
-            elif t_p[1]>0: t_p[1] -= 1
-            nr -=1
+        while nr > 0:
+            if t_p[0] > 0:
+                t_p[0] -= 1
+            elif t_p[1] > 0:
+                t_p[1] -= 1
+            nr -= 1
 
         p_t = {nr_t*preise['t'] + t_p[0]*preise['e'] + t_p[1]*preise['j']: [(nr_t, 't'), (t_p[0], 'e'), (t_p[1], 'j')]}
         print(p_t)
 
-    # Maximier Anzahl an Familienkarten
+    # Maximiere Anzahl an Familienkarten
     t_p = [e, j]
     nr_f = 0
-
-
-
-
-
-
-
+ 
 
 if __name__ == '__main__':
     calculate_price(we=False, fe=True, g=0, k=1, j=4, e=5)
