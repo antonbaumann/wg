@@ -52,7 +52,7 @@ def calculate_price(we, fe, g, k, j, e):
     # Maximiere Anzahl an Familienkarten
     t_p = [e, j]
     nr_f = 0
- 
+
 
 if __name__ == '__main__':
     calculate_price(we=False, fe=True, g=0, k=1, j=4, e=5)
