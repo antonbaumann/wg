@@ -27,19 +27,34 @@ def remove_duplicates(lst):
     return c
 
 
+def adjust(t):
+    t = sorted(t, key=lambda k: k['c'], reverse=True)
+    best = 0
+    end = len(t)
+    for r in t:
+        if r['c'] > best:
+            best = r['c']
+    if best >= 800:
+        for i in range(len(t)):
+            if t[i]['c'] < best:
+                end = i
+                break
+    t = t[:end]
+    return sorted(t, key=lambda k: k['ind'], reverse=False)
+
+
 def main(we, fe, g, k, j, e):
     if k > 0 and e == 0:
         print("Kinder unter 4J dürfen nicht ohne begleitung eines Erwachsenen ins Schwimmbad gehen!")
         return False
 
     table = prices.prices(e, j, we, 0)
+    table = adjust(table)
     h = []
     stack = []
     poss = []
     min_costs = 999999999999
 
-    if len(table) > 2:
-        table = table[:-2]
     stack.append([e, j, table, 0])
     h.append([len(table), 0])
 
@@ -65,6 +80,8 @@ def main(we, fe, g, k, j, e):
             top[3] + 1
         ]
 
+        t = adjust(t)
+
         h[len(h) - 1][1] += 1
 
         if new[0] == new[1] == 0:
@@ -75,7 +92,6 @@ def main(we, fe, g, k, j, e):
                 print("##################################################################")
 
             poss.append([costs, sorted(tmp, key=lambda k: k['c'], reverse=True)])
-
             if costs < min_costs:
                 min_costs = costs
 
@@ -93,20 +109,21 @@ def main(we, fe, g, k, j, e):
             h.append([len(new[2]), 0])
 
     poss = sorted(poss, key=lambda k: k[0])
+    poss = remove_duplicates(poss)
+    poss = poss[:min(len(poss), 5)]
+    return poss
 
-    return remove_duplicates(poss)
 
 if __name__ == '__main__':
     we = True
     fe = False
     g = 1
     k = 1
-    j = 7
+    j = 10
     e = 9
 
     lst = main(we, fe, g, k, j, e)
-    if len(lst) > 7:
-        lst = lst[:7]
+
     for p in lst:
         print(p[0])
         prices.show_table(p[1])

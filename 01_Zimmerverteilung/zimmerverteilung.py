@@ -121,7 +121,7 @@ def find_room(person, zimmeraufteilung):
             return zimmer
 
 
-def test(zimmeraufteilung, personen):   # überprüft ob alle wünsche erfüllt wurden
+def test(zimmeraufteilung, personen):   # überprüft ob alle Wünsche erfüllt wurden
     for p in personen:
         zimmer = find_room(p, zimmeraufteilung)
         for pro in p[1]:
@@ -140,10 +140,22 @@ def test(zimmeraufteilung, personen):   # überprüft ob alle wünsche erfüllt 
     return True
 
 
+def check(personen):
+    for pers in personen:
+        if pers[0] in pers[2]:
+            print()
+            print(pers[0] + " steht auf ihrer eigenen Kontra-Liste!")
+            print(pers[0] + " wird von " + str(pers[2]) + " entfernt...")
+            pers[2].remove(pers[0])
+            print(pers)
+
+
 if __name__ == '__main__':
     personen = read_file("txt/zimmerbelegung6.txt")
 
     print(personen)
+
+    check(personen)
 
     schuelerListe = []
     for p in personen:
