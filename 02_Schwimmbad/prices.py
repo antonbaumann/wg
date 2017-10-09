@@ -1,4 +1,7 @@
-def price_list(we, g):
+import texttable as tt
+
+
+def price_list(we):
     prices = {
             'e':  350,
             'j':  250,
@@ -10,11 +13,6 @@ def price_list(we, g):
         prices['j'] = prices['j'] * 4 / 5
     else:
         prices.pop('t')
-
-    if g:
-        prices['f'] = prices['f'] * 9 / 10
-        if not we:
-            prices['t'] = prices['t'] * 9 / 10
 
     return prices
 
@@ -36,7 +34,7 @@ def sort_and_remove_duplicates(t):
     return c
 
 
-def remove_bad_items(t, param):
+def remove_bad_items(t):
     end = 0
     for i in range(len(t)):
         if t[i]['ind'] > 1:
@@ -53,45 +51,23 @@ def generate_groups(e, j, prices):
     m = 6
 
     if 't' in prices:
-        # Fill wih adults
-        for i in range(1, min(m, e)+1):
-            tmp = {
-                'e': i,
-                'j': 0,
-                'c': prices['t'],
-                'c_s': prices['e'] * i,
-                'ind': prices['t'] / (prices['e'] * i)
-            }
-            t.append(tmp)
-
-        # Fill with adolescents
-        for i in range(1, min(m, j)+1):
-            tmp = {
-                'e': 0,
-                'j': i,
-                'c': prices['t'],
-                'c_s': prices['j'] * i,
-                'ind': prices['t'] / (prices['j'] * i)
-            }
-            t.append(tmp)
-
-        # mix
-        c_e, c_j = e, 0
-        if c_e >= 6: c_e = 5
-        while c_e >= 0 and c_j <= j:
-            tmp = {
-                'e': c_e,
-                'j': c_j,
-                'c': prices['t'],
-                'c_s': prices['j'] * c_j + prices['e'] * c_e,
-                'ind': prices['t'] / (prices['j'] * c_j + prices['e'] * c_e)
-            }
-            c_e -= 1
-            c_j += 1
-            t.append(tmp)
+        for i in range(min(e, 6) + 1):
+            for k in range(min(j, 6) + 1):
+                if not i == k == 0 and i + k <= 6:
+                    tmp = {
+                        'e': i,
+                        'j': k,
+                        'c': prices['t'],
+                        'c_s': prices['j'] * k + prices['e'] * i,
+                        'ind': prices['t'] / (prices['j'] * k + prices['e'] * i)
+                    }
+                    t.append(tmp)
 
         t = sort_and_remove_duplicates(t)
-        t = remove_bad_items(t, 1)
+        # print("Tageskarte:")
+        # show_table(t)
+        # print()
+        t = remove_bad_items(t)
 
         groups.extend(t)
 
@@ -125,34 +101,57 @@ def generate_groups(e, j, prices):
                 }
                 f.append(tmp)
     f = sort_and_remove_duplicates(f)
-    f = remove_bad_items(f, 1)
+    # print("Familienkarte:")
+    # show_table(f)
+    # print()
+    f = remove_bad_items(f)
 
     groups.extend(f)
 
     # Einzelpreise
 
     # Adult
-    tmp = {
-        'e': 1,
-        'j': 0,
-        'c': prices['e'],
-        'c_s': prices['e'],
-        'ind': 1
-    }
-    groups.append(tmp)
+    if e > 0:
+        tmp = {
+            'e': 1,
+            'j': 0,
+            'c': prices['e'],
+            'c_s': prices['e'],
+            'ind': 1
+        }
+        groups.append(tmp)
 
     # Adulescent
-    tmp = {
-        'e': 0,
-        'j': 1,
-        'c': prices['j'],
-        'c_s': prices['j'],
-        'ind': 1
-    }
-    groups.append(tmp)
+    if j > 0:
+        tmp = {
+            'e': 0,
+            'j': 1,
+            'c': prices['j'],
+            'c_s': prices['j'],
+            'ind': 1
+        }
+        groups.append(tmp)
 
     return sort_and_remove_duplicates(groups)
 
+
+def show_table(groups):
+    tab = tt.Texttable()
+    headings = ['Erw.', 'Jug.', 'Kosten', 'Kosten einzeln', 'index']
+    tab.header(headings)
+
+    for g in groups:
+        tab.add_row((g['e'], g['j'], g['c'], g['c_s'], g['ind']))
+
+    s = tab.draw()
+    print(s)
+    print()
+
+
+def prices(e, j, we, g):
+    prices = price_list(we)
+    groups = generate_groups(e, j, prices)
+    return groups
 
 def main():
     inp = ''
@@ -162,16 +161,16 @@ def main():
     j   = 0
     g   = None
 
-    we, h, e, j, g = False, True, 6, 6, 0
+    we, h, e, j, g = False, True, 5, 0, 0
 
-    print(we, h, e, j, g)
-    prices = price_list(we, g)
+    # print(we, h, e, j, g)
+    print(e, j, we, 0)
+    prices = price_list(we)
     for p in prices:
         print(p, prices[p])
     groups = generate_groups(e, j, prices)
 
-    for g in groups:
-        print(g)
+    show_table(groups)
 
 
 if __name__ == '__main__':
