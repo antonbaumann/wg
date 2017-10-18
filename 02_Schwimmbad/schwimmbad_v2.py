@@ -115,23 +115,15 @@ def main(we, fe, g, k, j, e):
 
 
 if __name__ == '__main__':
-    we = True
+    we = False
     fe = False
     g = 1
     k = 1
     j = 10
-    e = 9
+    e = 5
 
     lst = main(we, fe, g, k, j, e)
 
     for p in lst:
         print(p[0])
         prices.show_table(p[1])
-
-        # while g > 0 and not fe:
-        #     for p in lst:
-        #         price = p[0]
-        #         cards = p[1]
-        #         p_group = price * 9 / 10
-        #         p_single = price
-        #         if e > 0:

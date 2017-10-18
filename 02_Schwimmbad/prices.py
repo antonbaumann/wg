@@ -161,7 +161,7 @@ def main():
     j   = 0
     g   = None
 
-    we, h, e, j, g = False, True, 5, 0, 0
+    we, h, e, j, g = False, True, 5, 5, 0
 
     # print(we, h, e, j, g)
     print(e, j, we, 0)

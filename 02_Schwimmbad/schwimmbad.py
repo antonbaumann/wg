@@ -100,9 +100,9 @@ if __name__ == '__main__':
     we = True
     fe = False
     g = 1
-    k = 1
+    k = 5
     j = 7
-    e = 9
+    e = 5
 
     lst = main(we, fe, g, k, j, e)
     if len(lst) > 7:

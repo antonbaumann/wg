@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import numpy as np
 import sys
 from queue import *
@@ -151,7 +153,7 @@ def check(personen):
 
 
 if __name__ == '__main__':
-    personen = read_file("txt/zimmerbelegung6.txt")
+    personen = read_file("txt/zimmerbelegung4.txt")
 
     print(personen)
 

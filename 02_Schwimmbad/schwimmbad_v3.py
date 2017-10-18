@@ -1,13 +1,17 @@
+#! /usr/bin/env python3
+
 import math
 import prices
 
 
-def f_makes_sense(e, j):
-    if e >= 1 and j >= 3:
+def f_makes_sense(d):
+    if d['r'] < 4:
+        return False
+    if d['e'] >= 1 and d['j'] >= 3:
         return True
-    if e >= 2 and j >= 2:
+    if d['e'] >= 2 and d['j'] >= 2:
         return True
-    return
+    return False
 
 
 def main(we, fe, g, k, j, e):
@@ -24,16 +28,18 @@ def main(we, fe, g, k, j, e):
         'r': e + j  # Anzahl an noch "verwendbaren" Personen
     }
 
+    d_copy = d.copy()
+
     # Am Wochenende werden keine Tageskarten verkauft
     # -> Tageskarten werden aus dict(d) entfernt
     if we:
         d.pop('nr_t')
 
-    # wenn !Wochenende -> Tageskarten werden verkauft
+    # wenn !Wochenende
+    # -> Tageskarten werden verkauft
     if not we:
         all = d['e'] + d['j']
         # mit einer Tageskarte können 6 Personen ins Schwimmbad
-        #
         d['r'] = all - math.floor(all / 6) * 6
         d['nr_t'] = all - d['r']
 
@@ -52,9 +58,9 @@ def main(we, fe, g, k, j, e):
     if we:
         variant.pop('t')
 
-    # Familienkarten werden auf
-    while f_makes_sense(d['e'], d['j']):
-        print(d)
+    # Familienkarten
+    while f_makes_sense(d):
+        # print(d)
         if d['e'] >= 1 and d['j'] >= 3 and d['j'] > d['e'] + 3:
             variant['f'].append((1, 3))
             d['e'] -= 1
@@ -71,9 +77,12 @@ def main(we, fe, g, k, j, e):
             d['j'] -= 3
             d['r'] -= 4
 
+    # Einzelkarten
     left = {'e': 0, 'j': 0}
     tmp_j = d['j']
+
     while d['r'] > 0:
+        # print(left)
         if tmp_j > 0:
             left['j'] += 1
             tmp_j -= 1
@@ -82,7 +91,7 @@ def main(we, fe, g, k, j, e):
         d['r'] -= 1
 
     while left['e'] + left['j'] > 0:
-        print(left)
+        # print(left)
         table = prices.prices(left['e'], left['j'], we, 0)
         row_to_use = table[0]
 
@@ -102,29 +111,86 @@ def main(we, fe, g, k, j, e):
 
     # Mit Tageskarten auffüllen
     if not we:
-        while d['e'] > 0 and d['j'] > 0:
+        while d['nr_t'] > 0:
             tmp_e = min(6, d['e'])
             tmp_j = 6 - tmp_e
 
             variant['t'].append((tmp_e, tmp_j))
             d['e'] -= tmp_e
             d['j'] -= tmp_j
+            d['nr_t'] -= tmp_e + tmp_j
 
     p = prices.price_list(we)
     c = len(variant['f']) * p['f'] + variant['e'] * p['e'] + variant['j'] * p['j']
     if not we:
         c += len(variant['t']) * p['t']
 
-    print(c, variant)
-    return variant
+    print("KOSTEN OHNE GUTSCHEINE:")
+    print(c, variant, "\n")
+
+    # GUTSCHEINE
+    if g == 0 or fe:
+        return c, variant
+
+    print("GUTSCHEINE:", g)
+
+    # Extrem seltener Fall:
+    # Es gibt gleich viele oder mehr Gutscheine als Personen
+    if g >= d_copy['e'] + d_copy['j']:
+        print("Jeder kann kostenlos ins Schwimmbad gehen!")
+        return 0, {'t': [], 'f': [], 'e': d_copy['e'], 'j': d_copy['j']}
+
+    # Einfacher Fall:
+    # Es gibt gleich viele oder weniger Gutscheine als Einzelkarten
+    if g <= variant['e'] + variant['j']:
+        variant['e_g'] = 0
+        variant['j_g'] = 0
+
+        while variant['e'] > 0 and g > 0:
+            g -= 1
+            variant['e'] -= 1
+            variant['e_g'] += 1
+            c -= p['e']
+
+        while variant['j'] > 0 and g > 0:
+            g -= 1
+            variant['j'] -= 1
+            variant['j_g'] += 1
+            c -= p['j']
+
+        return c, variant
+
+    # Komplexer Fall:
+    # Es gibt mehr Gutscheine als Einzelkarten
+    if g > variant['e'] + variant['j']:
+        print("Variant 3:")
+        variant['e_g'] = 0
+        variant['j_g'] = 0
+        while variant['e'] > 0 and g > 0:
+            g -= 1
+            variant['e'] -= 1
+            variant['e_g'] += 1
+            c -= p['e']
+        while variant['j'] > 0 and g > 0:
+            g -= 1
+            variant['j'] -= 1
+            variant['j_g'] += 1
+            c -= p['j']
+
+        # TODO Komplexer Fall!!
+        print(g)
+        print(c, variant)
+
+    return c, variant
 
 
 if __name__ == '__main__':
-    we = True
+    we = False
     fe = False
-    g = 1
+    g = 4
     k = 1
     j = 10
-    e = 9
+    e = 5
 
     lst = main(we, fe, g, k, j, e)
+    # print(lst)

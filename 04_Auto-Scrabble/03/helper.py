@@ -25,6 +25,7 @@ def is_possible(s):
         # Ueberprueft ob pre in kuerzelliste ist
         # Ueberprueft ob Umlaute in post
         if pre in KUERZEL and not any((c in umlaute) for c in post):
+            print('> ' + pre + ' ' + post)
             return True
 
     return False
