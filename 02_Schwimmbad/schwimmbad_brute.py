@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import prices
 from prices import show_table
 
@@ -120,7 +122,7 @@ if __name__ == '__main__':
     g = 1
     k = 1
     j = 10
-    e = 5
+    e = 10
 
     lst = main(we, fe, g, k, j, e)
 

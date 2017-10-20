@@ -177,6 +177,7 @@ def main(we, fe, g, k, j, e):
             variant['j_g'] += 1
             c -= p['j']
 
+        variant_g = []
         # TODO Komplexer Fall!!
         print(g)
         print(c, variant)
@@ -190,7 +191,7 @@ if __name__ == '__main__':
     g = 4
     k = 1
     j = 10
-    e = 5
+    e = 7
 
     lst = main(we, fe, g, k, j, e)
     # print(lst)

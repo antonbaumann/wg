@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 import time
 
 # Debug print() an/aus
@@ -100,7 +103,8 @@ if __name__ == '__main__':
     for word in AUTOSCRABBLE:
         print(word)
         check(word)
-        print()
+        print("")
+
     end = time.time()
 
     print(end - start)

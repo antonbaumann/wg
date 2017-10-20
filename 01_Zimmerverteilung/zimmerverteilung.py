@@ -155,7 +155,7 @@ def check(personen):
 if __name__ == '__main__':
     personen = read_file("txt/zimmerbelegung4.txt")
 
-    print(personen)
+    # print(personen)
 
     check(personen)
 
