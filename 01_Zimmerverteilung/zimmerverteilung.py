@@ -21,6 +21,7 @@ def read_file(s):
 
         person = [name, pro, con]
         personen.append(person)
+    f.close()
     return sorted(personen)
 
 
@@ -122,7 +123,6 @@ def find_room(person, zimmeraufteilung):
         if person[0] in zimmer:
             return zimmer
 
-
 def test(zimmeraufteilung, personen):   # überprüft ob alle Wünsche erfüllt wurden
     for p in personen:
         zimmer = find_room(p, zimmeraufteilung)
@@ -152,10 +152,7 @@ def check(personen):
             print(pers)
 
 
-if __name__ == '__main__':
-    personen = read_file("txt/zimmerbelegung4.txt")
-
-    # print(personen)
+def zimmeraufteilung(personen):
 
     check(personen)
 
@@ -182,5 +179,11 @@ if __name__ == '__main__':
     for l in room_list_namen:
         print(l)
 
-    print()
     test(room_list_namen, personen)
+    return room_list_namen, personen
+
+
+if __name__ == '__main__':
+    file = "txt/zimmerbelegung10.txt"
+    personen = read_file(file)
+    zimmeraufteilung(personen)

@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 
 import math
-import prices
 import copy
+import prices
 
 
 def f_makes_sense(d):
@@ -92,7 +92,6 @@ def main(we, fe, g, k, j, e):
         d['r'] -= 1
 
     while left['e'] + left['j'] > 0:
-        # print(left)
         table = prices.prices(left['e'], left['j'], we, 0)
         row_to_use = table[0]
 
@@ -165,7 +164,6 @@ def main(we, fe, g, k, j, e):
     # Komplexer Fall:
     # Es gibt mehr Gutscheine als Einzelkarten
     if g > variant['e'] + variant['j']:
-        print("Variant 3:")
         variant['e_g'] = 0
         variant['j_g'] = 0
         while variant['e'] > 0 and g > 1:
@@ -183,10 +181,19 @@ def main(we, fe, g, k, j, e):
         variant["f"] = sorted(variant["f"])
         while g > 4 and len(variant["f"]) > 0:
             erw, jug = variant["f"].pop()
-            variant["e_g"] += erw
-            variant["j_g"] += jug
-            c -= 800
-            g -= 4
+            variant["j"] += jug
+            variant["e"] += erw
+            c += p["e"]*variant["e"] + p["j"]*variant["j"]
+            while variant['e'] > 0 and g > 1:
+                g -= 1
+                variant['e'] -= 1
+                variant['e_g'] += 1
+                c -= p['e']
+            while variant['j'] > 0 and g > 1:
+                g -= 1
+                variant['j'] -= 1
+                variant['j_g'] += 1
+                c -= p['j']
 
         # solange wie möglich Tageskarten auflösen
         # Tageskarten als zweites, da profitabler als Familienkarten
@@ -194,10 +201,19 @@ def main(we, fe, g, k, j, e):
             variant["t"] = sorted(variant["t"])
             while g > 6 and len(variant["t"]) > 0:
                 erw, jug = variant["t"].pop()
-                variant["e_g"] += erw
-                variant["j_g"] += jug
-                c -= 1100
-                g -= 6
+                variant["j"] += jug
+                variant["e"] += erw
+                c += p["e"] * variant["e"] + p["j"] * variant["j"]
+                while variant['e'] > 0 and g > 1:
+                    g -= 1
+                    variant['e'] -= 1
+                    variant['e_g'] += 1
+                    c -= p['e']
+                while variant['j'] > 0 and g > 1:
+                    g -= 1
+                    variant['j'] -= 1
+                    variant['j_g'] += 1
+                    c -= p['j']
 
         # jetzt ist 1 <= g <= 6
         kosten_gutschein_gruppe = c * 90 / 100
@@ -250,6 +266,8 @@ def main(we, fe, g, k, j, e):
             t_variant = None
 
         if kosten_gutschein_gruppe <= f_c and kosten_gutschein_gruppe <= t_c:
+            variant["g_group"] = True
+            variant["g_left"] = g - 1
             return kosten_gutschein_gruppe, variant
         if f_c <= t_c and f_c <= kosten_gutschein_gruppe:
             return f_c, f_variant
@@ -260,11 +278,11 @@ def main(we, fe, g, k, j, e):
 
 
 if __name__ == '__main__':
-    we = True
+    we = False
     fe = False
-    g = 18
-    k = 10
-    j = 11
+    g = 4
+    k = 9
+    j = 4
     e = 7
 
     lst = main(we, fe, g, k, j, e)
