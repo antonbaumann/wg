@@ -2,6 +2,7 @@
 
 import math
 import prices
+import copy
 
 
 def f_makes_sense(d):
@@ -128,7 +129,8 @@ def main(we, fe, g, k, j, e):
     print("KOSTEN OHNE GUTSCHEINE:")
     print(c, variant, "\n")
 
-    # GUTSCHEINE
+
+    ############# GUTSCHEINE ##################
     if g == 0 or fe:
         return c, variant
 
@@ -166,32 +168,104 @@ def main(we, fe, g, k, j, e):
         print("Variant 3:")
         variant['e_g'] = 0
         variant['j_g'] = 0
-        while variant['e'] > 0 and g > 0:
+        while variant['e'] > 0 and g > 1:
             g -= 1
             variant['e'] -= 1
             variant['e_g'] += 1
             c -= p['e']
-        while variant['j'] > 0 and g > 0:
+        while variant['j'] > 0 and g > 1:
             g -= 1
             variant['j'] -= 1
             variant['j_g'] += 1
             c -= p['j']
 
-        variant_g = []
-        # TODO Komplexer Fall!!
-        print(g)
-        print(c, variant)
+        # solange wie möglich Familienkarten auflösen
+        variant["f"] = sorted(variant["f"])
+        while g > 4 and len(variant["f"]) > 0:
+            erw, jug = variant["f"].pop()
+            variant["e_g"] += erw
+            variant["j_g"] += jug
+            c -= 800
+            g -= 4
+
+        # solange wie möglich Tageskarten auflösen
+        # Tageskarten als zweites, da profitabler als Familienkarten
+        if "t" in variant:
+            variant["t"] = sorted(variant["t"])
+            while g > 6 and len(variant["t"]) > 0:
+                erw, jug = variant["t"].pop()
+                variant["e_g"] += erw
+                variant["j_g"] += jug
+                c -= 1100
+                g -= 6
+
+        # jetzt ist 1 <= g <= 6
+        kosten_gutschein_gruppe = c * 90 / 100
+
+        f_variant = copy.deepcopy(variant)
+        f_g = g
+        f_c = c
+        if len(f_variant["f"]) > 0:
+            erw, jug = f_variant["f"].pop()
+            f_variant["e"] += erw
+            f_variant["j"] += jug
+            f_c -= 800
+            f_c += p["e"]*erw + p["j"]*jug
+            while f_variant['e'] > 0 and f_g > 0:
+                f_g -= 1
+                f_variant['e'] -= 1
+                f_variant['e_g'] += 1
+                f_c -= p['e']
+            while f_variant['j'] > 0 and f_g > 0:
+                f_g -= 1
+                f_variant['j'] -= 1
+                f_variant['j_g'] += 1
+                f_c -= p['j']
+
+        if "t" in variant:
+            t_variant = copy.deepcopy(variant)
+            t_g = g
+            t_c = c
+            if len(t_variant["t"]) > 0:
+                erw, jug = t_variant["t"].pop()
+
+                t_variant["e"] += erw
+                t_variant["j"] += jug
+
+                t_c -= 1100
+                t_c += p["e"]*erw + p["j"]*jug
+                while t_variant['e'] > 0 and t_g > 0:
+                    t_g -= 1
+                    t_variant['e'] -= 1
+                    t_variant['e_g'] += 1
+                    t_c -= p['e']
+
+                while t_variant['j'] > 0 and t_g > 0:
+                    t_g -= 1
+                    t_variant['j'] -= 1
+                    t_variant['j_g'] += 1
+                    t_c -= p['j']
+        else:
+            t_c = 10000000000000000
+            t_variant = None
+
+        if kosten_gutschein_gruppe <= f_c and kosten_gutschein_gruppe <= t_c:
+            return kosten_gutschein_gruppe, variant
+        if f_c <= t_c and f_c <= kosten_gutschein_gruppe:
+            return f_c, f_variant
+        else:
+            return t_c, t_variant
 
     return c, variant
 
 
 if __name__ == '__main__':
-    we = False
+    we = True
     fe = False
-    g = 4
-    k = 1
-    j = 10
+    g = 18
+    k = 10
+    j = 11
     e = 7
 
     lst = main(we, fe, g, k, j, e)
-    # print(lst)
+    print(lst)
