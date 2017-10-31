@@ -1,13 +1,12 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 # by Anton Baumann
 
-# imports
+import sys
 import matplotlib.pyplot as plt
 
-alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-digits = "0123456789"
-
-
-# Findet zweithöchstes/niedrigstes Element in Liste:
+# Findet zweithöchstes bzw. niedrigstes Element in Liste:
 # True-> höchstes; False -> niedrigstes
 def find_second(l, b):
     tmp = []
@@ -18,7 +17,6 @@ def find_second(l, b):
             tmp.pop(0)
     return tmp[0]
 
-
 def calculate_intersection(a, b):
     x = (a[0][0], a[1][0], b[0][0], b[1][0])
     y = (a[0][1], a[1][1], b[0][1], b[1][1])
@@ -27,11 +25,15 @@ def calculate_intersection(a, b):
     if denominator == 0:
         return None
 
-    upper_lim_x = find_second(x, True)
-    lower_lim_x = find_second(x, False)
+    upper_x_a = max(a[0][0], a[1][0])
+    lower_x_a = min(a[0][0], a[1][0])
+    upper_y_a = max(a[0][1], a[1][1])
+    lower_y_a = min(a[0][1], a[1][1])
 
-    upper_lim_y = find_second(y, True)
-    lower_lim_y = find_second(y, False)
+    upper_x_b = max(b[0][0], b[1][0])
+    lower_x_b = min(b[0][0], b[1][0])
+    upper_y_b = max(b[0][1], b[1][1])
+    lower_y_b = min(b[0][1], b[1][1])
 
     s_x = ((x[3] - x[2]) * (x[1] * y[0] - x[0] * y[1]) - (x[1] - x[0]) * (x[3] * y[2] - x[2] * y[3])) / denominator
     s_y = ((y[0] - y[1]) * (x[3] * y[2] - x[2] * y[3]) - (y[2] - y[3]) * (x[1] * y[0] - x[0] * y[1])) / denominator
@@ -42,9 +44,9 @@ def calculate_intersection(a, b):
         s_y = 0.0
     S = (s_x, s_y)
 
-    if (lower_lim_x <= s_x <= upper_lim_x) and (lower_lim_y <= s_y <= upper_lim_y):
-        return S
-
+    if lower_x_a <= s_x <= upper_x_a and lower_x_b <= s_x <= upper_x_b:
+        if lower_y_a <= s_y <= upper_y_a and lower_y_b <= s_y <= upper_y_b:
+            return S
     return None
 
 
@@ -65,9 +67,6 @@ def read_File(filename):
 
         punkte.add(points[0])
         punkte.add(points[1])
-
-        # erreichbare_punkte.setdefault(points[0], set()).add(points[1])
-        # erreichbare_punkte.setdefault(points[1], set()).add(points[0])
 
         for poi in points:
             if poi not in punkt_geraden:
@@ -136,18 +135,38 @@ def modified_dfs(punkt_geraden, gerade_punkte):
                         dreiecke.add(tuple(sorted(dreieck)))
     return dreiecke
 
-
-
-
-
-
-if __name__ == '__main__':
-    punkt_geraden, gerade_punkte, punkte = read_File("txt/dreiecke6.txt")
+def main(b, path):
+    punkt_geraden, gerade_punkte, punkte = read_File(path)
     evaluate(punkt_geraden, gerade_punkte, punkte)
     dreiecke = modified_dfs(punkt_geraden, gerade_punkte)
 
-    for d in dreiecke:
-        print(d)
+    if b:
+        i = 1
+        for p in punkte:
+            plt.plot(p[0], p[1], marker='o', color='grey')
+        for k, v in gerade_punkte.items():
+            plt.plot([v[0][0], v[1][0]], [v[0][1], v[1][1]], color='black')
+        plt.show()
+
+        for d in dreiecke:
+            print(str(i) + " -> " + str(d))
+            i += 1
+            for p in punkte:
+                plt.plot(p[0], p[1], marker='o', color='grey')
+            for k, v in gerade_punkte.items():
+                plt.plot([v[0][0], v[1][0]], [v[0][1], v[1][1]], color='black')
+            plt.plot([d[0][0], d[1][0], d[2][0], d[0][0]], [d[0][1], d[1][1], d[2][1], d[0][1]], color='y')
+            plt.show()
 
     print()
     print(len(dreiecke))
+
+
+if __name__ == '__main__':
+    path = sys.argv[1]
+    b = False
+    if len(sys.argv) >= 3:
+        if sys.argv[2] == '--visualize':
+            b = True
+    main(b, path)
+
