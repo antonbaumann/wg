@@ -1,7 +1,9 @@
 #! /usr/bin/env python3
 
 import prices
+import sys
 from prices import show_table
+import time
 
 global V
 V = False
@@ -29,35 +31,47 @@ def remove_duplicates(lst):
     return c
 
 
-def adjust(t):
-    t = sorted(t, key=lambda k: k['c'], reverse=True)
-    best = 0
-    end = len(t)
-    for r in t:
-        if r['c'] > best:
-            best = r['c']
-    if best >= 800:
-        for i in range(len(t)):
-            if t[i]['c'] < best:
-                end = i
-                break
-    t = t[:end]
-    return sorted(t, key=lambda k: k['ind'], reverse=False)
+def adjust(t, e, j, we):
+    # t = sorted(t, key=lambda k: k['c'], reverse=True)
+    # best = 0
+    # end = len(t)
+    # for r in t:
+    #     if r['c'] > best:
+    #         best = r['c']
+    # if best >= 800:
+    #     for i in range(len(t)):
+    #         if t[i]['c'] < best:
+    #             end = i
+    #             break
+    # t = t[:end]
+
+    # print('START-----{')
+    if e > 6 and not we:
+        t = [d for d in t if d['e'] == 6]
+    elif e + j > 6:
+        if not we:
+            t = [d for d in t if d['e'] + d['j'] == 6]
+        else:
+            t = [d for d in t if d['e'] + d['j'] == 4]
+    t = sorted(t, key=lambda k: k['ind'], reverse=False)
+    print(t)
+    # print("}------END")
+    return t
 
 
-def main(we, fe, g, k, j, e):
+def main(we, k, j, e, g):
     if k > 0 and e == 0:
         print("Kinder unter 4J dürfen nicht ohne begleitung eines Erwachsenen ins Schwimmbad gehen!")
         return False
 
-    table = prices.prices(e, j, we, 0)
-    table = adjust(table)
+    table = prices.prices(e, j, we)
+    table = adjust(table, e, j, we)
     h = []
     stack = []
     poss = []
     min_costs = 999999999999
 
-    stack.append([e, j, table, 0])
+    stack.append([e, j, table])
     h.append([len(table), 0])
 
     costs = 0
@@ -68,7 +82,7 @@ def main(we, fe, g, k, j, e):
 
         if V:
             print(h)
-            print(top[0], top[1], top[3])
+            print(top[0], top[1])
             show_table(t)
 
         row = t[h[len(h) - 1][1]]
@@ -78,12 +92,11 @@ def main(we, fe, g, k, j, e):
         new = [
             top[0] - row['e'],
             top[1] - row['j'],
-            prices.prices(top[0] - row['e'], top[1] - row['j'], we, 0),
-            top[3] + 1
+            prices.prices(top[0] - row['e'], top[1] - row['j'], we),
+            # top[3] + 1
         ]
 
-        t = adjust(t)
-
+        new[2] = adjust(new[2], new[0], new[1], we)
         h[len(h) - 1][1] += 1
 
         if new[0] == new[1] == 0:
@@ -112,20 +125,26 @@ def main(we, fe, g, k, j, e):
 
     poss = sorted(poss, key=lambda k: k[0])
     poss = remove_duplicates(poss)
-    poss = poss[:min(len(poss), 5)]
+    # poss = poss[:min(len(poss), 5)]
     return poss
 
 
 if __name__ == '__main__':
     we = False
     fe = False
-    g = 1
+    g = 0
     k = 1
-    j = 10
-    e = 10
+    j = 16
+    e = 15
+    start = time.time()
+    lst = main(we, k, j, e, g)
 
-    lst = main(we, fe, g, k, j, e)
 
-    for p in lst:
+    for p in lst[:5]:
         print(p[0])
         prices.show_table(p[1])
+
+    end = time.time()
+
+    print(end - start)
+    print(len(lst))

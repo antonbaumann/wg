@@ -1,19 +1,43 @@
-A
-+ B
+Anton
++ Luis
+- Ela Christian Ingrid Gela Werner
+
+Luis
++ Julian Jannik
+- Oli
+
+Christine
++ Oli
 -
 
-B
-+ C
+Oli
++ Christine
 -
 
-C
-+D
+Werner
++ Ingrid
 -
 
-D
+Ingrid
++ Werner
+-
+
+Gela
++ Ingrid Werner
+-
+
+Julian
 +
 -
 
-E
-+ D
+Jannik
++ Julian
+-
+
+Ela
++ Christian
+-
+
+Christian
++
 -

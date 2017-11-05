@@ -1,6 +1,7 @@
+# usr/bin/env python3
 
 def open_file(name):
-    file = open(name, 'r')
+    file = open(name, 'r', encoding="UTF-8")
     w_list = set()
     for line in file.readlines():
         line.replace('/n', '')
@@ -16,18 +17,14 @@ def is_possible(s):
     for i in range(1, min(len(s), 4)):
         pre = s[:i]
         post = s[i:]
-
         print(pre, post)
-
-        if len(post) >= 3:
+        if len(post) > 2:
             continue
-
         # Ueberprueft ob pre in kuerzelliste ist
         # Ueberprueft ob Umlaute in post
         if pre in KUERZEL and not any((c in umlaute) for c in post):
             print('> ' + pre + ' ' + post)
             return True
-
     return False
 
 if __name__ == '__main__':

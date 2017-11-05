@@ -1,24 +1,14 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
 import time
 
 # Debug print() an/aus
-v = False
+import sys
 
-
-# Liest ein Textfile ein
-# Gibt eine alphabetisch sortierte Liste von Strings zurück
 def open_file(name):
-    file = open(name, 'r')
-    w_list = set()
-    for line in file.readlines():
-        line.replace('/n', '')
-        w_list.add(line.strip())
-    w_list = sorted(w_list)
-    file.close()
-    return w_list
-
+    with open(name, 'r', encoding='UTF-8') as file:
+        return sorted({line.strip() for line in file.readlines()})
 
 # mit bin_search und ohne output:    0.00542 s
 # mit naiver suche und ohne output:  0.81236 s
@@ -39,26 +29,28 @@ def binary_search(lst, target):
 # überprüft ob String s auf einem einzelnen Numernschild darstellbar ist
 # O(log n)
 def is_possible(s):
+    if len(s) > 5:
+        return False
     umlaute = set('ÄÖÜ')
     s = s.upper().strip()
     for i in range(1, min(len(s), 4)):  # O(1)
         # Teilt String in 2 Teile
         pre = s[:i]
         post = s[i:]
-
         # Zweiter Teil darf laut Aufgabestellung nicht >2 sein
         if len(post) > 2:
             continue
-
         # Ueberprueft ob pre in kuerzelliste ist
         # Ueberprueft ob Umlaute in post
-        # triviale suche -> if pre in KUERZEL and not any((c in umlaute) for c in post):
+        # triviale suche ->
+        # if pre in KUERZEL and not any((c in umlaute) for c in post):
         if not any((c in umlaute) for c in post) and binary_search(KUERZEL, pre):
             return True
     return False
 
 
 def check(word):
+    # START, STOP, STEP = 2, 5, 1
     START, STOP, STEP = 5, 2, -1
     stack = [[0, START]]
     i, n = 0, STOP
@@ -86,25 +78,28 @@ def check(word):
 
     print("Darstellbar!")
 
-    comb = []
-    for i, n in stack:
-        comb.append(word[i: i + n])
-
+    comb = [word[i: i + n] for i, n in stack]
     print(comb)
     return True
 
 
 if __name__ == '__main__':
-    global KUERZEL
-    KUERZEL = open_file("../txt/kuerzelliste.txt")
-    AUTOSCRABBLE = open_file("../txt/autoscrabble.txt")
+    global v
+    v = False
+    if len(sys.argv) < 3:
+        print("Usage:\n", "./autoscrabble.py kuerzelliste wordlist")
+        sys.exit()
+    if len(sys.argv) >= 4:
+        if sys.argv[3] == '-v':
+            v = True
 
+    global KUERZEL
+    KUERZEL = open_file(sys.argv[1])
+    AUTOSCRABBLE = open_file(sys.argv[2])
     start = time.time()
     for word in AUTOSCRABBLE:
         print(word)
         check(word)
-        print("")
-
+        print()
     end = time.time()
-
-    print(end - start)
+    print(end - start, 's')

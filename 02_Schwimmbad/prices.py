@@ -1,6 +1,3 @@
-import texttable as tt
-
-
 def price_list(we):
     prices = {
             'e':  350,
@@ -136,6 +133,7 @@ def generate_groups(e, j, prices):
 
 
 def show_table(groups):
+    import texttable as tt
     tab = tt.Texttable()
     headings = ['Erw.', 'Jug.', 'Kosten', 'Kosten einzeln', 'index']
     tab.header(headings)
@@ -148,7 +146,7 @@ def show_table(groups):
     print()
 
 
-def prices(e, j, we, g):
+def prices(e, j, we):
     prices = price_list(we)
     groups = generate_groups(e, j, prices)
     return groups
@@ -161,7 +159,7 @@ def main():
     j   = 0
     g   = None
 
-    we, h, e, j, g = False, True, 5, 5, 0
+    we, h, e, j = False, True, 5, 7
 
     # print(we, h, e, j, g)
     print(e, j, we, 0)
