@@ -1,17 +1,15 @@
 # Bundeswettbewerb Informatik 2017
 
-## 01 (fertig)	
+## 01
 Fertig!
-
-(In "zimmerbelegung5.txt" hat Marie sich auf der CON-Liste selbst stehen
-Fehler von BWInf?)
 
 
 ## 02
-...................
+Fertig!
+(ineffizient. evtl. besserer Ansatz)
 
 
-## 03 (fertig)
+## 03
 Fertig!
 
 
@@ -20,4 +18,4 @@ Fertig!
 
 
 ## 05
-Fertig für Tiefe 1
+Fertig!
