@@ -195,7 +195,7 @@ class Game:
                 nr_moves_rook = len(self.possible_moves_rook(B_copy.rooks[0], boxes=B_copy.boxes))
                 if nr_moves_rook < best_move[2]:
                     best_move = [B_copy.pawns[i], target_square, nr_moves_rook, i]
-        print("Best move:", coord_to_str(start_square), '-', coord_to_str(best_move[1]), ':',best_move[2])
+        print("Best move:", coord_to_str(self.B.pawns[best_move[3]].pos), '-', coord_to_str(best_move[1]), ':',best_move[2])
         self.B.move(self.B.pawns[best_move[3]], best_move[1])
 
     # Berechnet besten Zug für den Turm
