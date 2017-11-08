@@ -1,5 +1,7 @@
-# !usr/bin/env python3
+#! /usr/bin/env python3
 # encoding: utf-8
+
+# by Anton Baumann
 
 import sys
 
@@ -29,10 +31,13 @@ def find_words(wordlist, kuerzel):
 
 
 if __name__ == '__main__':
-    nr_letters = 2
-    if len(sys.argv) == 2:
-        nr_letters = sys.argv[1]
+    if len(sys.argv) > 1:
+        nr_letters = str(sys.argv[1])
+    else:
+        print("Usage:", "4b.py [n]")
+        sys.exit()
+
     wordlist = "wordlist.txt"
     kuerzel = "../txt/kuerzelliste.txt"
     words = find_words(wordlist, kuerzel)
-    [print(w.upper()) for w in words if len(w) == nr_letters]
+    [print(w.upper()) for w in words if len(w) == int(nr_letters)]

@@ -1,3 +1,7 @@
+# !usr/bin/env python3
+
+# by Anton Baumann
+
 def price_list(we):
     prices = {
             'e':  350,

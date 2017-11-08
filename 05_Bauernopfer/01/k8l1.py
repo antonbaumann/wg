@@ -1,3 +1,6 @@
+#! /usr/bin/env python3
+# by Anton Baumann
+
 import copy
 import re
 import collections

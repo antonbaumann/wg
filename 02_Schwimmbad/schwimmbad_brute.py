@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 
+# by Anton Baumann
+
 import copy
 import prices
 import sys
