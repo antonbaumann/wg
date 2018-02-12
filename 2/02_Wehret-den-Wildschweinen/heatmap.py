@@ -108,5 +108,4 @@ def possible_paths(n):
     plt.savefig("out/wildschwein{}/right_to_left_float.png".format(n), bbox_inches='tight')
 
 if __name__ == '__main__':
-    for i in range(1, 6):
-        possible_paths(i)
+    possible_paths(5)
